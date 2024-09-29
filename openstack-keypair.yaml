@@ -1,0 +1,21 @@
+---
+- name: OpenStack create keypair (must pass in public_key and key_name)
+  hosts: ctl
+  vars_files:
+    - openstack-env.yaml
+  vars:
+    user_home_dir: '~'
+  tasks:
+    - name: Copy the public key
+      ansible.builtin.copy:
+        src: '{{ public_key }}'
+        dest: '{{ user_home_dir }}/{{ public_key }}'
+
+    - name: Create keypair
+      shell: 'openstack keypair create --public-key {{ public_key }} {{ key_name }}'
+      environment: '{{ proxy_env }}'
+      register: keypair_create
+
+    - debug: 'msg={{ keypair_create.stdout }}'
+
+    - debug: 'msg={{ keypair_create.stderr }}'

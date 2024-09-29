@@ -1,0 +1,14 @@
+---
+- name: OpenStack associate floating ip with server (must pass in hostname and floating_ip)
+  hosts: ctl
+  vars_files:
+    - openstack-env.yaml
+  tasks:
+    - name: Associate floating ip with server
+      shell: 'openstack server add floating ip {{ hostname }} {{ floating_ip }}'
+      environment: '{{ proxy_env }}'
+      register: floating_ip_associate_with_server
+
+    - debug: 'msg={{ floating_ip_associate_with_server.stdout }}'
+
+    - debug: 'msg={{ floating_ip_associate_with_server.stderr }}'

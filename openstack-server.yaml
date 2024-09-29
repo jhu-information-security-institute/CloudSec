@@ -1,0 +1,14 @@
+---
+- name: OpenStack create server (must pass in flavor, image, network, key_name, hostname)
+  hosts: ctl
+  vars_files:
+    - openstack-env.yaml
+  tasks:
+    - name: Create server
+      shell: 'openstack server create --flavor {{ flavor }} --image {{ image }} --network {{ network }} --key-name {{ key_name }} {{ hostname }}'
+      environment: '{{ proxy_env }}'
+      register: server_create
+
+    - debug: 'msg={{ server_create.stdout }}'
+
+    - debug: 'msg={{ server_create.stderr }}'

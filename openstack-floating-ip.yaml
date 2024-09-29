@@ -1,0 +1,14 @@
+---
+- name: OpenStack create floating ip (must pass in network)
+  hosts: ctl
+  vars_files:
+    - openstack-env.yaml
+  tasks:
+    - name: Create floating ip
+      shell: 'openstack floating ip create {{ network }}'
+      environment: '{{ proxy_env }}'
+      register: floating_ip_create
+
+    - debug: 'msg={{ floating_ip_create.stdout }}'
+
+    - debug: 'msg={{ floating_ip_create.stderr }}'
